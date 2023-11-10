@@ -191,6 +191,12 @@
                     // return this. lessons.sort(sortByLocation);
                     return sortedLessons;
                 },
+                isOrderValid: function(){
+                    const nameRegex = /^[A-Za-z]+$/;
+                    const phoneRegex = /^\d+$/;
+
+                    return nameRegex.test(this.order.firstname) && phoneRegex.test(this.order.phone); 
+                },
 
             }
         });
