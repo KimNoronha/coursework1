@@ -197,6 +197,22 @@
 
                     return nameRegex.test(this.order.firstname) && phoneRegex.test(this.order.phone); 
                 },
+                lessonsDisplayed: function(){
+                    if(this.searchLesson){
+                        const query = this.searchLesson.toLowerCase();
+                        return this.lessons.filter(lesson => {
+                        const title = lesson.title.toLowerCase();
+                        const location = lesson.location.toLowerCase();
+                        return title.includes(query) || location.includes(query);
+                     });
+                    }else{
+                        return this.sortedLessons;
+                    }
+
+
+
+                   
+                },
 
             }
         });
