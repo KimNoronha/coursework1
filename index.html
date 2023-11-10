@@ -33,8 +33,27 @@
 
         <div v-if="showProduct">
             <main>
-                
-                <div v-for="lesson in sortedLessons">
+                <div>
+                    <input v-model="searchLesson" placeholder="search">
+                </div>
+                <div v-for="lesson in lessonsDisplayed" :key="lesson.id">
+                    <firgure>
+                        <img v-bind:src="lesson.image" width="100" height="100">
+                    </firgure>
+                    <p>Subject: {{lesson.title}}</p>
+                    <p>Location: {{lesson.location}}</p>
+                    <p>Price: {{lesson.price}}</p>
+                    <p>Spaces: {{itemsLeft(lesson)}}</p>
+                  
+                    <button v-if="canAddToCart(lesson)" v-on:click="addItemToCart(lesson)">
+                        <i class="fa fa-shopping-cart" style="color: #000000;"></i>
+                        Add to cart</button>
+                        <button v-else disabled>Add to cart</button>
+                      
+                </div>
+
+
+                <!-- <div v-for="lesson in sortedLessons">
                 
                     <firgure>
                         <img v-bind:src="lesson.image" width="100" height="100">
@@ -50,7 +69,7 @@
                         <button v-else disabled>Add to cart</button>
                       
                     
-                </div>
+                </div> -->
             </main>
         </div>
            
