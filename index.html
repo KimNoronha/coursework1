@@ -14,7 +14,7 @@
             <h1 v-text="sitename"></h1>
             <button v-on:click="showCheckout" 
          v-if="lessonPresentInCart" >
-             <!--     :disabled="cart.length === 0"-->
+             
                 {{itemsInTheCart}}
                 
                 Checkout
@@ -53,23 +53,7 @@
                 </div>
 
 
-                <!-- <div v-for="lesson in sortedLessons">
                 
-                    <firgure>
-                        <img v-bind:src="lesson.image" width="100" height="100">
-                    </firgure>
-                    <p>Subject: {{lesson.title}}</p>
-                    <p>Location: {{lesson.location}}</p>
-                    <p>Price: {{lesson.price}}</p>
-                    <p>Spaces: {{itemsLeft(lesson)}}</p>
-                  
-                    <button v-if="canAddToCart(lesson)" v-on:click="addItemToCart(lesson)">
-                        <i class="fa fa-shopping-cart" style="color: #000000;"></i>
-                        Add to cart</button>
-                        <button v-else disabled>Add to cart</button>
-                      
-                    
-                </div> -->
             </main>
         </div>
            
@@ -118,6 +102,7 @@
                    
                 },
                 searchLesson:"",
+                lessonPresentInCart:false,
                 
                 
 
@@ -133,7 +118,7 @@
                 addItemToCart: function(lesson) {
                     this.cart.push(lesson.id);
                     this.lessonPresentInCart = true;
-                    // this.lessonsInCheckout.push(lesson);
+                    
                 },
                 submitForm: function(){
                     const nameRegex = /^[A-Za-z]+$/;
@@ -146,9 +131,7 @@
                 },
                 canAddToCart: function(lesson){
                     return lesson.spaces > this.cartCount(lesson.id);
-                    // let lessonCountInCart = this.cartCount(lesson.id);
-
-                    // return lesson.spaces > lessonCountInCart;
+                   
                 },
                 cartCount(id){
                     let count = 0;
@@ -210,7 +193,7 @@
                         sortedLessons.reverse();
                     }
 
-                    // return this. lessons.sort(sortByLocation);
+                    
                     return sortedLessons;
                 },
                 isOrderValid: function(){
