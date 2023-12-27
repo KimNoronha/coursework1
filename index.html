@@ -9,14 +9,15 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
     <title>Individual Demonstration Booking System</title>
 </head>
+
 <body>
     <div id="app">
         <header>
             <h1 v-text="sitename"></h1>
             <button v-on:click="showCheckout" v-if="lessonPresentInCart">
-             
+
                 {{itemsInTheCart}}
-                
+
                 Cart
             </button>
             <select v-model="sortingLessons">
@@ -28,7 +29,7 @@
                 <option value="ascending">Ascending</option>
                 <option value="descending">Descending</option>
             </select>
-           
+
         </header>
 
         <div v-if="showProduct">
@@ -44,111 +45,111 @@
                     <p>Location: {{lesson.location}}</p>
                     <p>Price: {{lesson.price}}</p>
                     <p>Spaces: {{itemsLeft(lesson)}}</p>
-                  
+
                     <button v-if="canAddToCart(lesson)" v-on:click="addItemToCart(lesson)">
                         <i class="fa fa-shopping-cart" style="color: #000000;"></i>
                         Add to cart</button>
-                        <button v-else disabled>Add to cart</button>
-                      
+                    <button v-else disabled>Add to cart</button>
+
                 </div>
 
-               
-                
+
+
             </main>
         </div>
-           
-            <div v-else>
-                <h2>Shopping Cart</h2>
 
-                <p>Order Details:</p>
-                <ul>
-                    <li v-for="lesson in cart" >
-                        <p>Subject: {{lesson.title}}</p>
-                        <p>Location: {{lesson.location}}</p>
-                        <p>Price: {{lesson.price}}</p>
-                        <button v-on:click="removeLessons(lesson)">Remove</button>
-                    </li>
-                </ul>
+        <div v-else>
+            <h2>Shopping Cart</h2>
 
-                <p>First name:
-                    <input v-model="order.firstname"/>
-                    </p>
-                    <p>Phone:
-                        <input v-model="order.phone"/>
-                    </p>
+            <p>Order Details:</p>
+            <ul>
+                <li v-for="lesson in cart">
+                    <p>Subject:{{lesson.title}}</p>
+                    <p>Location: {{lesson.location}}</p>
+                    <p>Price: {{lesson.price}}</p>
+                    <button v-on:click="removeLessons(lesson)">Remove</button>
+                </li>
+            </ul>
 
-                <p>User information:</p>
-                <p>First name: {{order.firstname}}</p>
-                <p>Phone: {{order.phone}}</p>
+            <p>First name:
+                <input v-model="order.firstname" />
+            </p>
+            <p>Phone:
+                <input v-model="order.phone" />
+            </p>
 
-                <button v-on:click="submitForm" :disabled="!isOrderValid">Place order</button>
-            </div>
-        
+            <p>User information:</p>
+            <p>First name: {{order.firstname}}</p>
+            <p>Phone: {{order.phone}}</p>
+
+            <button v-on:click="submitForm" :disabled="!isOrderValid">Place order</button>
+        </div>
+
     </div>
     <script type="text/javascript">
         let webstore = new Vue({
-            el:'#app',
-            data:{
-                sitename:'Individual Demonstration Booking System',
-                showProduct:true,
-                lessons:lessons,
-                sortingLessons:"location",
-                sortingOrder:"ascending",
-                cart:[],
-                order:{
-                    firstname:"",
-                    phone:"",
-                   
+            el: '#app',
+            data: {
+                sitename: 'Individual Demonstration Booking System',
+                showProduct: true,
+                lessons: lessons,
+                sortingLessons: "location",
+                sortingOrder: "ascending",
+                cart: [],
+                order: {
+                    firstname: "",
+                    phone: "",
+
                 },
-                searchLesson:"",
-                lessonPresentInCart:false,
-                
-                
+                searchLesson: "",
+                lessonPresentInCart: false,
+
+
 
             },
-            methods:{
-                showCheckout: function(){
-                    if (this.showProduct){
+            methods: {
+                showCheckout: function () {
+                    if (this.showProduct) {
                         this.showProduct = false
-                    }else{
-                        this.showProduct=true
+                    } else {
+                        this.showProduct = true
                     }
                 },
-                addItemToCart: function(lesson) {
-                    this.cart.push(lesson.id);
+                addItemToCart: function (lesson) {
+                    this.cart.push(lesson);
                     this.lessonPresentInCart = true;
-                    
+
                 },
-                submitForm: function(){
+                submitForm: function () {
                     const nameRegex = /^[A-Za-z]+$/;
                     const phoneRegex = /^\d+$/;
 
-                    if (nameRegex.test(this.order.firstname) && phoneRegex.test(this.order.phone)){
+                    if (nameRegex.test(this.order.firstname) && phoneRegex.test(this.order.phone)) {
                         alert('Order submitted.');
                     }
-                    
+
                 },
-                canAddToCart: function(lesson){
+                canAddToCart: function (lesson) {
                     return lesson.spaces > this.cartCount(lesson.id);
-                   
+
                 },
-                cartCount(id){
+                cartCount(id) {
                     let count = 0;
-                    for (let i=0; i < this.cart.length; i++){
-                        if(this.cart[i] === id){
+                    for (let i = 0; i < this.cart.length; i++) {
+                        if (this.cart[i] === id) {
                             count++;
                         }
-                        
+
                     }
                     return count;
                 },
-                itemsLeft(lesson){
+                itemsLeft(lesson) {
                     return lesson.spaces - this.cartCount(lesson.id);
                 },
-                removeLessons: function(lesson){
+                removeLessons: function (lesson) {
                     const index = this.cart.indexOf(lesson);
-                    if (index !== -1){
-                        
+                    if (index !== -1) {
+
                         lesson.spaces++;
                         this.cart.splice(index, 1);
                     }
@@ -157,69 +158,70 @@
 
             },
             computed: {
-                itemsInTheCart: function(){
+                itemsInTheCart: function () {
                     return this.cart.length || "";
                 },
-                sortedLessons(){
+                sortedLessons() {
 
-                    function sortByLocation(a,b){
+                    function sortByLocation(a, b) {
                         if (a.location > b.location) return 1;
                         if (a.location < b.location) return -1;
                         return 0;
                     }
 
-                    function sortBySubject(a,b){
+                    function sortBySubject(a, b) {
                         if (a.title > b.title) return 1;
                         if (a.title < b.title) return -1;
                         return 0;
                     }
 
-                    function sortByPrice(a,b){
+                    function sortByPrice(a, b) {
                         if (a.price > b.price) return 1;
                         if (a.price < b.price) return -1;
                         return 0;
                     }
 
-                    if (this.sortingLessons === 'location'){
-                        sortedLessons= this.lessons.sort(sortByLocation);
-                    }else if (this.sortingLessons === "subject"){
-                        sortedLessons= this.lessons.sort(sortBySubject);
-                    }else if(this.sortingLessons === "price"){
-                        sortedLessons= this.lessons.sort(sortByPrice);
+                    if (this.sortingLessons === 'location') {
+                        sortedLessons = this.lessons.sort(sortByLocation);
+                    } else if (this.sortingLessons === "subject") {
+                        sortedLessons = this.lessons.sort(sortBySubject);
+                    } else if (this.sortingLessons === "price") {
+                        sortedLessons = this.lessons.sort(sortByPrice);
                     }
 
-                    if(this.sortingOrder === "descending"){
+                    if (this.sortingOrder === "descending") {
                         sortedLessons.reverse();
                     }
 
-                    
+
                     return sortedLessons;
                 },
-                isOrderValid: function(){
+                isOrderValid: function () {
                     const nameRegex = /^[A-Za-z]+$/;
                     const phoneRegex = /^\d+$/;
 
-                    return nameRegex.test(this.order.firstname) && phoneRegex.test(this.order.phone); 
+                    return nameRegex.test(this.order.firstname) && phoneRegex.test(this.order.phone);
                 },
-                lessonsDisplayed: function(){
-                    if(this.searchLesson){
+                lessonsDisplayed: function () {
+                    if (this.searchLesson) {
                         const query = this.searchLesson.toLowerCase();
                         return this.lessons.filter(lesson => {
-                        const title = lesson.title.toLowerCase();
-                        const location = lesson.location.toLowerCase();
-                        return title.includes(query) || location.includes(query);
-                     });
-                    }else{
+                            const title = lesson.title.toLowerCase();
+                            const location = lesson.location.toLowerCase();
+                            return title.includes(query) || location.includes(query);
+                        });
+                    } else {
                         return this.sortedLessons;
                     }
 
 
 
-                   
+
                 },
 
             }
         });
     </script>
 </body>
+
 </html>
