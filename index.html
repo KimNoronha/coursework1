@@ -5,7 +5,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <script src="https://unpkg.com/vue@2.7.8/dist/vue.js"></script>
-    <script src="lessons.js"></script>
+    <!-- <script src="lessons.js"></script> -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
     <title>Individual Demonstration Booking System</title>
 </head>
@@ -92,7 +92,7 @@
             data: {
                 sitename: 'Individual Demonstration Booking System',
                 showProduct: true,
-                lessons: lessons,
+                lessons: [], //lessons,
                 sortingLessons: "location",
                 sortingOrder: "ascending",
                 cart: [],
@@ -105,6 +105,30 @@
                 lessonPresentInCart: false,
 
 
+
+            },
+            created: function(){
+                // fetch("http://localhost:5502/collections/products").then(
+                //     function(response){
+                //         response.text().then(
+                //             function(text){
+                //                 alert(text);
+                //             }
+                //         )
+                //     }
+                // )
+
+                fetch("http://localhost:5502/collections/products").then(
+                    function(response){
+                        response.json().then(
+                            function(json){
+                                // alert(json);
+                                // console.log(json);
+                                webstore.lessons = json;
+                            }
+                        )
+                    }
+                )
 
             },
             methods: {
@@ -162,7 +186,6 @@
                     return this.cart.length || "";
                 },
                 sortedLessons() {
-
                     function sortByLocation(a, b) {
                         if (a.location > b.location) return 1;
                         if (a.location < b.location) return -1;
