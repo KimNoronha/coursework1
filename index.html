@@ -185,6 +185,38 @@
                     }
 
                 },
+                saveProductToDB(){
+                    const newProduct = {
+                        "id": 14,
+                        "image":"images/maths.png",
+                        "title": "Engineering",
+                        "location":"Scotland",
+                        "price": 36,
+                        "spaces":5
+
+                    
+                    }
+
+                    fetch( "http://coursework2-env.eba-yvmeadmq.eu-west-2.elasticbeanstalk.com/collections/products" ,{
+                        method: "POST",
+                        headers:{
+                            "Content-Type": "application/json",
+
+                        },
+                        body: JSON.stringify(newProduct)
+                    }).then(
+                        function(response){
+                            response.json().then(
+                                function(json){
+                                    alert("Success: " + json.acknowledged);
+                                    console.log("Success: " + json.acknowledged);
+
+                                    webstore.lessons.push(newProduct);
+                                }
+                            )
+                        }
+                    )
+                }
 
             },
             computed: {
