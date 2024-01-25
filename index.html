@@ -30,6 +30,12 @@
                 <option value="descending">Descending</option>
             </select>
 
+
+            <button @click="saveProductToDB">
+                <span class="fas fa-save"></span>
+                TestSave a product
+            </button>
+
         </header>
 
         <div v-if="showProduct">
@@ -107,7 +113,7 @@
 
 
             },
-            created: function(){
+            created: function () {
                 // fetch("http://localhost:5502/collections/products").then(
                 //     function(response){
                 //         response.text().then(
@@ -118,10 +124,10 @@
                 //     }
                 // )
 
-                fetch("http://localhost:5502/collections/products").then(
-                    function(response){
+                fetch("http://coursework2-env.eba-yvmeadmq.eu-west-2.elasticbeanstalk.com/collections/products").then(
+                    function (response) {
                         response.json().then(
-                            function(json){
+                            function (json) {
                                 // alert(json);
                                 // console.log(json);
                                 webstore.lessons = json;
