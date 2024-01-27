@@ -141,6 +141,7 @@
                 addItemToCart: function (lesson) {
                     this.cart.push(lesson);
                     this.order.lessonIds.push(lesson.id); 
+                    this.order.numberofSpaces++;
                     this.lessonPresentInCart = true;
 
                 },
@@ -156,12 +157,7 @@
                             headers:{
                                 'Content-Type': 'application/json',
                             },
-                            body: JSON.stringify({
-                                firstname: this.order.firstname,
-                                phone:this.order.phone,
-                                lessonIds: this.order.lessonIds,
-                                numberofSpaces: this.order.numberofSpaces,
-                            }),
+                            body: JSON.stringify(this.order),
                         })
                         .then(response => response.json())
                         .then(json => {
