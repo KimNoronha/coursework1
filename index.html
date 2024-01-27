@@ -180,7 +180,7 @@
                         lessonDetails.forEach(detail => {
                             const lessonId = detail.id;
 
-                            fetch(`https://coursework2-env.eba-yvmeadmq.eu-west-2.elasticbeanstalk.com/collections/lessons/${lessonId}/updateSpaces`, {
+                            fetch(`https://coursework2-env.eba-yvmeadmq.eu-west-2.elasticbeanstalk.com/collections/lessons`, {
                                 method: 'PUT',
                                 headers: {
                                     'Content-Type': 'application/json',
