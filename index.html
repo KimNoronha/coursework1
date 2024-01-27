@@ -114,15 +114,6 @@
 
             },
             created: function () {
-                // fetch("http://localhost:5502/collections/products").then(
-                //     function(response){
-                //         response.text().then(
-                //             function(text){
-                //                 alert(text);
-                //             }
-                //         )
-                //     }
-                // )
 
                 fetch("https://coursework2-env.eba-yvmeadmq.eu-west-2.elasticbeanstalk.com/collections/products").then(
                     function (response) {
@@ -155,7 +146,20 @@
                     const phoneRegex = /^\d+$/;
 
                     if (nameRegex.test(this.order.firstname) && phoneRegex.test(this.order.phone)) {
-                        alert('Order submitted.');
+                        // alert('Order submitted.');
+
+                        fetch('https://coursework2-env.eba-yvmeadmq.eu-west-2.elasticbeanstalk.com/collections/orders',{
+                            method: 'POST',
+                            headers:{
+                                'Content-Type': 'application/json',
+                            },
+                            body: JSON.strigify(this.order),
+                        })
+                        .then(response => response.json())
+                        .then(json => {
+                            console.log("Order submitted: ", json);
+                        })
+                        .catch(error => console.error("Error submitting order: ", error));
                     }
 
                 },
