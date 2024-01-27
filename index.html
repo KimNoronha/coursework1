@@ -176,23 +176,28 @@
 
 
                 updateSpacesAfterOrder: function (lessonDetails) {
-                    lessonDetails.forEach(detail => {
-                        const lessonId = detail.id;
+                    if (lessonDetails && Array.isArray(lessonDetails)) {
+                        lessonDetails.forEach(detail => {
+                            const lessonId = detail.id;
 
-                        fetch(`https://coursework2-env.eba-yvmeadmq.eu-west-2.elasticbeanstalk.com/collections/lessons`, {
-                            method: 'PUT',
-                            headers: {
-                                'Content-Type': 'application/json',
-                            },
-                            body: JSON.stringify({}),
-                        })
-                            .then(response => response.json())
-                            .then(json => {
-                                console.log("Spaces updated: ", json);
+                            fetch(`https://coursework2-env.eba-yvmeadmq.eu-west-2.elasticbeanstalk.com/collections/lessons/${lessonId}/updateSpaces`, {
+                                method: 'PUT',
+                                headers: {
+                                    'Content-Type': 'application/json',
+                                },
+                                body: JSON.stringify({}),
                             })
-                            .catch(error => console.error("Error updating spaces: ", error));
-                    });
+                                .then(response => response.json())
+                                .then(json => {
+                                    console.log("Spaces updated: ", json);
+                                })
+                                .catch(error => console.error("Error updating spaces: ", error));
+                        });
+                    } else {
+                        console.error("Invalid lessonDetails format:", lessonDetails);
+                    }
                 },
+
 
                 canAddToCart: function (lesson) {
                     return lesson.spaces > this.cartCount(lesson.id);
