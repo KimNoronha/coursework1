@@ -176,11 +176,14 @@
 
 
                 updateSpacesAfterOrder: function (lessonDetails) {
+                    console.log("Received lessonDetails:", lessonDetails);
+
                     if (lessonDetails && Array.isArray(lessonDetails)) {
                         lessonDetails.forEach(detail => {
                             const lessonId = detail.id;
+                            console.log("Updating spaces for lessonId:", lessonId);
 
-                            fetch(`https://coursework2-env.eba-yvmeadmq.eu-west-2.elasticbeanstalk.com/collections/lessons`, {
+                            fetch(`https://coursework2-env.eba-yvmeadmq.eu-west-2.elasticbeanstalk.com/collections/lessons/${lessonId}/updateSpaces`, {
                                 method: 'PUT',
                                 headers: {
                                     'Content-Type': 'application/json',
