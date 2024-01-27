@@ -107,7 +107,7 @@
                     firstname: "",
                     phone: "",
                     lessonDetails: [],
-                   
+
 
                 },
                 searchLesson: "",
@@ -170,6 +170,24 @@
                     }
 
                 },
+
+                updateLessonSpaces: function () {
+                    // Make a PUT request to update lesson spaces
+                    fetch('https://coursework2-env.eba-yvmeadmq.eu-west-2.elasticbeanstalk.com/collections/updateLessonSpaces', {
+                        method: 'PUT',
+                        headers: {
+                            'Content-Type': 'application/json',
+                        },
+                        body: JSON.stringify(this.order.lessonDetails),
+                    })
+                        .then(response => response.json())
+                        .then(json => {
+                            console.log("Lesson spaces updated: ", json);
+                        })
+                        .catch(error => console.error("Error updating lesson spaces: ", error));
+                },
+
+
                 canAddToCart: function (lesson) {
                     return lesson.spaces > this.cartCount(lesson.id);
 
