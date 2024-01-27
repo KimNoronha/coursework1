@@ -146,7 +146,7 @@
                         spaces: lesson.spaces,
                     });
                     this.lessonPresentInCart = true;
-                  
+
 
                 },
                 submitForm: function () {
@@ -166,13 +166,33 @@
                             .then(response => response.json())
                             .then(json => {
                                 console.log("Order submitted: ", json);
+
+                                this.updateSpacesAfterOrder(json.lessonDetails);
                             })
                             .catch(error => console.error("Error submitting order: ", error));
                     }
 
                 },
 
-            
+
+                updateSpacesAfterOrder: function (lessonDetails) {
+                    lessonDetails.forEach(detail => {
+                        const lessonId = detail.id;
+
+                        fetch(`https://coursework2-env.eba-yvmeadmq.eu-west-2.elasticbeanstalk.com/collections/lessons/${lessonId}/updateSpaces`, {
+                            method: 'PUT',
+                            headers: {
+                                'Content-Type': 'application/json',
+                            },
+                            body: JSON.stringify({}),
+                        })
+                            .then(response => response.json())
+                            .then(json => {
+                                console.log("Spaces updated: ", json);
+                            })
+                            .catch(error => console.error("Error updating spaces: ", error));
+                    });
+                },
 
                 canAddToCart: function (lesson) {
                     return lesson.spaces > this.cartCount(lesson.id);
