@@ -73,6 +73,7 @@
                     <p>Subject:{{lesson.title}}</p>
                     <p>Location: {{lesson.location}}</p>
                     <p>Price: {{lesson.price}}</p>
+                    <p>Spaces: {{lesson.spaces}}</p>
                     <button v-on:click="removeLessons(lesson)">Remove</button>
                 </li>
             </ul>
@@ -105,8 +106,8 @@
                 order: {
                     firstname: "",
                     phone: "",
-                    lessonIds:[],
-                    numberofSpaces:0,
+                    lessonDetails: [],
+                   
 
                 },
                 searchLesson: "",
@@ -140,8 +141,10 @@
                 },
                 addItemToCart: function (lesson) {
                     this.cart.push(lesson);
-                    this.order.lessonIds.push(lesson.id); 
-                    this.order.numberofSpaces++;
+                    this.order.lessonDetails.push({
+                        id: lesson.id,
+                        spaces: lesson.spaces,
+                    });
                     this.lessonPresentInCart = true;
 
                 },
@@ -152,18 +155,18 @@
                     if (nameRegex.test(this.order.firstname) && phoneRegex.test(this.order.phone)) {
                         // alert('Order submitted.');
 
-                        fetch('https://coursework2-env.eba-yvmeadmq.eu-west-2.elasticbeanstalk.com/collections/orders',{
+                        fetch('https://coursework2-env.eba-yvmeadmq.eu-west-2.elasticbeanstalk.com/collections/orders', {
                             method: 'POST',
-                            headers:{
+                            headers: {
                                 'Content-Type': 'application/json',
                             },
                             body: JSON.stringify(this.order),
                         })
-                        .then(response => response.json())
-                        .then(json => {
-                            console.log("Order submitted: ", json);
-                        })
-                        .catch(error => console.error("Error submitting order: ", error));
+                            .then(response => response.json())
+                            .then(json => {
+                                console.log("Order submitted: ", json);
+                            })
+                            .catch(error => console.error("Error submitting order: ", error));
                     }
 
                 },
@@ -193,29 +196,29 @@
                     }
 
                 },
-                saveProductToDB(){
+                saveProductToDB() {
                     const newProduct = {
                         "id": 14,
-                        "image":"images/maths.png",
+                        "image": "images/maths.png",
                         "title": "Engineering",
-                        "location":"Scotland",
+                        "location": "Scotland",
                         "price": 36,
-                        "spaces":5
+                        "spaces": 5
 
-                    
+
                     }
 
-                    fetch( "https://coursework2-env.eba-yvmeadmq.eu-west-2.elasticbeanstalk.com/collections/products" ,{
+                    fetch("https://coursework2-env.eba-yvmeadmq.eu-west-2.elasticbeanstalk.com/collections/products", {
                         method: "POST",
-                        headers:{
+                        headers: {
                             "Content-Type": "application/json",
 
                         },
                         body: JSON.stringify(newProduct)
                     }).then(
-                        function(response){
+                        function (response) {
                             response.json().then(
-                                function(json){
+                                function (json) {
                                     alert("Success: " + json.acknowledged);
                                     console.log("Success: " + json.acknowledged);
 
