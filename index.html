@@ -41,7 +41,7 @@
         <div v-if="showProduct">
             <main>
 
-                <input type="text" id="searchTerm" placeholder="Enter search term">
+                <input type="text" id="searchTerm" placeholder="Enter search term" v-model="searchQuery">
 
 
                 <button @click="performSearch">Search</button>
@@ -169,46 +169,81 @@
 
                 },
 
+                // performSearch: function () {
+
+                //     const searchQueryValue = document.getElementById('searchTerm').value;
+
+                //     this.searchQuery = searchQueryValue;
+
+                //     fetch(`https://coursework2-env.eba-yvmeadmq.eu-west-2.elasticbeanstalk.com/search?term=${this.searchQueryValue}`)
+                //         .then(response => {
+
+                //             console.log("Response Object:", response);
+
+
+                //             if (!response.ok) {
+                //                 throw new Error(`Response status: ${response.status}`);
+                //             }
+
+
+                //             return response.json();
+                //         })
+                //         .then(json => {
+                //             this.lessons = json.map(lesson => ({
+                //                 ...lesson,
+                //                 lesson_id: lesson.id,
+                //                 id: lesson._id,
+                //             }));
+                //         })
+                //         .catch(error => {
+                //             // Log the detailed error message for debugging
+                //             console.error("Error fetching lessons: ", error);
+
+                //             // You can also log the status and status text if available
+                //             if (error.response) {
+                //                 console.error("Response status:", error.response.status);
+                //                 console.error("Response status text:", error.response.statusText);
+                //             }
+
+                //             // Handle the error or display an appropriate message to the user
+                //         })
+                // },
+
                 performSearch: function () {
+                    // Get the search query from the data property
+                    const searchQueryValue = this.searchQuery;
 
-                    const searchQueryValue = document.getElementById('searchTerm').value;
-
-                    this.searchQuery = searchQueryValue;
-
-                    fetch(`https://coursework2-env.eba-yvmeadmq.eu-west-2.elasticbeanstalk.com/search?term=${this.searchQueryValue}`)
-                        .then(response => {
-
-                            console.log("Response Object:", response);
-
-
-                            if (!response.ok) {
-                                throw new Error(`Response status: ${response.status}`);
-                            }
-
-
-                            return response.json();
-                        })
-                        .then(json => {
-                            this.lessons = json.map(lesson => ({
-                                ...lesson,
-                                lesson_id: lesson.id,
-                                id: lesson._id,
-                            }));
-                        })
-                        .catch(error => {
-                            // Log the detailed error message for debugging
-                            console.error("Error fetching lessons: ", error);
-
-                            // You can also log the status and status text if available
-                            if (error.response) {
-                                console.error("Response status:", error.response.status);
-                                console.error("Response status text:", error.response.statusText);
-                            }
-
-                            // Handle the error or display an appropriate message to the user
-                        })
+                    // Check if the search query is not empty
+                    if (searchQueryValue.trim() !== '') {
+                        fetch(`https://coursework2-env.eba-yvmeadmq.eu-west-2.elasticbeanstalk.com/search?term=${searchQueryValue}`)
+                            .then(response => {
+                                if (!response.ok) {
+                                    throw new Error(`Response status: ${response.status}`);
+                                }
+                                return response.json();
+                            })
+                            .then(json => {
+                                // Update the lessons data property with the search results
+                                this.lessons = json.map(lesson => ({
+                                    ...lesson,
+                                    lesson_id: lesson.id,
+                                    id: lesson._id,
+                                }));
+                            })
+                            .catch(error => {
+                                // Handle errors here
+                                console.error("Error fetching lessons: ", error);
+                                if (error.response) {
+                                    console.error("Response status:", error.response.status);
+                                    console.error("Response status text:", error.response.statusText);
+                                }
+                            });
+                    } else {
+                        // Handle the case when the search query is empty
+                        console.log("Search query is empty. Please enter a search term.");
+                        // Optionally, you can clear the search results (this.lessons) or display a message to the user.
+                    }
                 },
-
 
 
                 submitForm: function () {
