@@ -42,11 +42,13 @@
             <main>
                 <div>
                     <input v-model="searchLesson" placeholder="search">
+                    <button @click="searchLessons">Search</button>
+
                 </div>
                 <div v-for="lesson in lessonsDisplayed" :key="lesson.id">
-                    <firgure>
+                    <figure>
                         <img v-bind:src="lesson.image" width="100" height="100">
-                    </firgure>
+                    </figure>
                     <p>Subject: {{lesson.title}}</p>
                     <p>Location: {{lesson.location}}</p>
                     <p>Price: {{lesson.price}}</p>
@@ -163,44 +165,64 @@
                             },
                             body: JSON.stringify(this.order),
                         })
-                            .then(response => response.json())
-                            .then(json => {
-                                console.log("Order submitted: ", json);
+                            // .then(response => response.json())
+                            // .then(json => {
+                            //     console.log("Order submitted: ", json);
 
-                                this.updateSpacesAfterOrder(json.lessonDetails);
+
+                            // })
+                            // .catch(error => console.error("Error submitting order: ", error));
+
+
+
+                            .then(response => {
+                                // Loop through all lessons in the cart
+                                for (const lesson of this.cart) {
+                                    // Update space for each lesson individually
+                                    fetch(`https://coursework2-env.eba-yvmeadmq.eu-west-2.elasticbeanstalk.com/collections/products/${lesson.id}`, {
+                                        method: 'PUT',
+                                        headers: {
+                                            'Content-Type': 'application/json',
+                                        },
+                                        body: JSON.stringify({ spaces: lesson.spaces - 1 }), // Update spaces
+                                    }).then(response => {
+                                        // Handle individual lesson update responses
+                                    }).catch(error => {
+                                        // Handle individual lesson update errors
+                                    });
+                                }
                             })
-                            .catch(error => console.error("Error submitting order: ", error));
+
                     }
+
+                    // fetch(`https://coursework2-env.eba-yvmeadmq.eu-west-2.elasticbeanstalk.com/collections/products/${lesson.id}`, {
+                    //     method: 'PUT',
+                    //     headers: {
+                    //         'Content-Type': 'application/json',
+                    //     },
+                    //     body: JSON.stringify({ spaces: lesson.spaces - 1 }), // Update spaces
+                    // }).then(response => {
+                    //     // Handle response (e.g., log success or failure)
+                    // }).catch(error => {
+                    //     // Handle error
+                    // });
 
                 },
 
 
-                updateSpacesAfterOrder: function (lessonDetails) {
-                    console.log("Received lessonDetils:", lessonDetails);
+                searchLessons: function () {
 
-                    if (lessonDetails && Array.isArray(lessonDetails)) {
-                        lessonDetails.forEach(detail => {
-                            const lessonId = detail.id;
-                            console.log("Updating spaces for lessonId:", lessonId);
+                    console.log('Search Query:', this.searchLesson);
+                    fetch(`https://coursework2-env.eba-yvmeadmq.eu-west-2.elasticbeanstalk.com/search?query=${this.searchLesson}`)
+                        .then(response => response.json())
+                        .then(data => {
 
-                            fetch(`https://coursework2-env.eba-yvmeadmq.eu-west-2.elasticbeanstalk.com/collections/products`, {
-                                method: 'PUT',
-                                headers: {
-                                    'Content-Type': 'application/json',
-                                },
-                                body: JSON.stringify({}),
-                            })
-                                .then(response => response.json())
-                                .then(json => {
-                                    console.log("Spaces updated: ", json);
-                                })
-                                .catch(error => console.error("Error updating spaces: ", error));
-                        });
-                    } else {
-                        console.error("Invalid lessonDetails format:", lessonDetails);
-                    }
+                            console.log('Search Results:', data);
+                            // Update lessonsDisplayed with the search results
+                            this.lessonsDisplayed = data;
+                        })
+                        .catch(error => console.error("Error searching lessons: ", error));
                 },
-
 
                 canAddToCart: function (lesson) {
                     return lesson.spaces > this.cartCount(lesson.id);
