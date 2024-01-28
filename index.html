@@ -169,46 +169,6 @@
 
                 },
 
-                // performSearch: function () {
-
-                //     const searchQueryValue = document.getElementById('searchTerm').value;
-
-                //     this.searchQuery = searchQueryValue;
-
-                //     fetch(`https://coursework2-env.eba-yvmeadmq.eu-west-2.elasticbeanstalk.com/search?term=${this.searchQueryValue}`)
-                //         .then(response => {
-
-                //             console.log("Response Object:", response);
-
-
-                //             if (!response.ok) {
-                //                 throw new Error(`Response status: ${response.status}`);
-                //             }
-
-
-                //             return response.json();
-                //         })
-                //         .then(json => {
-                //             this.lessons = json.map(lesson => ({
-                //                 ...lesson,
-                //                 lesson_id: lesson.id,
-                //                 id: lesson._id,
-                //             }));
-                //         })
-                //         .catch(error => {
-                //             // Log the detailed error message for debugging
-                //             console.error("Error fetching lessons: ", error);
-
-                //             // You can also log the status and status text if available
-                //             if (error.response) {
-                //                 console.error("Response status:", error.response.status);
-                //                 console.error("Response status text:", error.response.statusText);
-                //             }
-
-                //             // Handle the error or display an appropriate message to the user
-                //         })
-                // },
-
                 performSearch: function () {
                     // Get the search query from the data property
                     const searchQueryValue = this.searchQuery;
