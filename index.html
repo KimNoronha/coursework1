@@ -5,7 +5,10 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <script src="https://unpkg.com/vue@2.7.8/dist/vue.js"></script>
-    <!-- <script src="lessons.js"></script> -->
+    <script src="lessons.js"></script>
+    <link rel="stylesheet" href="app.css">
+    <link rel="icon" type="image/png" href="images/favicon.png">
+    <link rel="manifest" href="lessons.webmanifest">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
     <title>Individual Demonstration Booking System</title>
 </head>
@@ -111,7 +114,7 @@
             data: {
                 sitename: 'Individual Demonstration Booking System',
                 showProduct: true,
-                lessons: [], //lessons,
+                lessons: lessons, // [],
                 sortingLessons: "location",
                 sortingOrder: "ascending",
                 cart: [],
@@ -131,18 +134,23 @@
             },
 
             created: function () {
-                fetch("https://coursework2-env.eba-yvmeadmq.eu-west-2.elasticbeanstalk.com/collections/products")
-                    .then(response => response.json())
-                    .then(json => {
+                if("serviceWorker" in navigator){
+                    navigator.serviceWorker.register("service-worker.js");
+                }
+                // fetch("https://coursework2-env.eba-yvmeadmq.eu-west-2.elasticbeanstalk.com/collections/products")
+            //     fetch("http://localhost:5502/collections/products")
+            //         .then(response => response.json())
+            //         .then(json => {
 
-                        webstore.lessons = json.map(lesson => ({
-                            ...lesson,
-                            lesson_id: lesson.id,
-                            id: lesson._id,
-                        }));
-                    })
-                    .catch(error => console.error("Error fetching lessons: ", error));
+            //             webstore.lessons = json.map(lesson => ({
+            //                 ...lesson,
+            //                 lesson_id: lesson.id,
+            //                 id: lesson._id,
+            //             }));
+            //         })
+            //         .catch(error => console.error("Error fetching lessons: ", error));
             },
+
 
 
 
@@ -175,7 +183,8 @@
 
                     // Check if the search query is not empty
                     if (searchQueryValue.trim() !== '') {
-                        fetch(`https://coursework2-env.eba-yvmeadmq.eu-west-2.elasticbeanstalk.com/search?term=${searchQueryValue}`)
+                        // fetch(`https://coursework2-env.eba-yvmeadmq.eu-west-2.elasticbeanstalk.com/search?term=${searchQueryValue}`)
+                        fetch(`http://localhost:5502/search?term=${searchQueryValue}`)
                             .then(response => {
                                 if (!response.ok) {
                                     throw new Error(`Response status: ${response.status}`);
@@ -213,7 +222,8 @@
                     if (nameRegex.test(this.order.firstname) && phoneRegex.test(this.order.phone)) {
 
 
-                        fetch('https://coursework2-env.eba-yvmeadmq.eu-west-2.elasticbeanstalk.com/collections/orders', {
+                        fetch('http://localhost:5502/collections/orders', {
+                        // fetch('https://coursework2-env.eba-yvmeadmq.eu-west-2.elasticbeanstalk.com/collections/orders', {
                             method: 'POST',
                             headers: {
                                 'Content-Type': 'application/json',
