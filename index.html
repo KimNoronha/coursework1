@@ -17,7 +17,7 @@
     <div id="app">
         <header>
             <h1 v-text="sitename"></h1>
-            <button v-on:click="showCheckout" v-if="lessonPresentInCart">
+            <!-- <button v-on:click="showCheckout" v-if="lessonPresentInCart">
 
                 {{itemsInTheCart}}
 
@@ -31,13 +31,48 @@
             <select v-model="sortingOrder">
                 <option value="ascending">Ascending</option>
                 <option value="descending">Descending</option>
-            </select>
+            </select> -->
 
 
             <!-- <button @click="saveProductToDB">
                 <span class="fas fa-save"></span>
                 TestSave a product
             </button> -->
+
+            <button @click="toggleShowProduct">
+                {{itemsInTheCart}}
+                <span class="fas fa-shopping-cart"></span>
+                Cart
+            </button>
+
+            <button v-if="testConsole" @click="toggleShowTestConsole">
+                <span class="fas fa-text-height"></span>
+                Test Console
+            </button>
+            <div v-if="testConsole &&  showTestConsole" class="test-console">
+
+                <button @click="deleteAllCaches" class="test-elem">
+                    <span class="fas fa-trash"></span>
+                    Delete All Caches
+                </button>
+
+                <button @click="unregisterAllServiceWorkers" class="test-elem">
+                    <span class="fab fa-uniregistry"></span>
+                    Unregister All ServiceWorkers
+                </button>
+
+                <button @click="reloadPage" class="test-elem">
+                    <span class="fas fa-sync"></span>
+                    Reload Page
+                </button>
+
+
+                <strong class="test-elem">HTTPS Test: </strong>
+                <a v-bind:href="serverURL" target="_blank">link</a>
+
+            </div>
+
+
 
         </header>
 
@@ -123,7 +158,9 @@
                 sitename: 'Individual Demonstration Booking System',
                 showProduct: true,
                 lessons: [], // lessons,
-                // serverURL: "http://localhost:5502/collections/products",
+                serverURL: "http://localhost:5502/collections/products",
+                testConsole: true,
+                showTestConsole: true,
                 sortingLessons: "location",
                 sortingOrder: "ascending",
                 cart: [],
@@ -147,17 +184,17 @@
                     navigator.serviceWorker.register("service-worker.js");
                 }
                 // fetch("https://coursework2-env.eba-yvmeadmq.eu-west-2.elasticbeanstalk.com/collections/products")
-                    fetch("http://localhost:5502/collections/products")
-                        .then(response => response.json())
-                        .then(json => {
+                fetch("http://localhost:5502/collections/products")
+                    .then(response => response.json())
+                    .then(json => {
 
-                            webstore.lessons = json.map(lesson => ({
-                                ...lesson,
-                                lesson_id: lesson.id,
-                                id: lesson._id,
-                            }));
-                        })
-                        .catch(error => console.error("Error fetching lessons: ", error));
+                        webstore.lessons = json.map(lesson => ({
+                            ...lesson,
+                            lesson_id: lesson.id,
+                            id: lesson._id,
+                        }));
+                    })
+                    .catch(error => console.error("Error fetching lessons: ", error));
             },
 
 
@@ -171,6 +208,15 @@
                         this.showProduct = true
                     }
                 },
+
+                toggleShowProduct(){
+                    this.showProduct = this.showProduct ? false : true;
+                },
+
+                toggleShowTestConsole() {
+                    this.showTestConsole = !this.showTestConsole; // This will toggle the value between true and false
+                },
+
                 addItemToCart: function (lesson) {
                     this.cart.push(lesson);
                     this.order.lessonDetails.push({
@@ -184,6 +230,27 @@
                     console.log("Lesson Details:", this.order.lessonDetails);
 
 
+                },
+
+                deleteAllCaches() {
+                    caches.keys().then(function (names) {
+                        for (let name of names)
+                            caches.delete(name);
+                    });
+                    console.log("All Caches Deleted");
+                },
+
+                unregisterAllServiceWorkers() {
+                    navigator.serviceWorker.getRegistrations().then(function (registrations) {
+                        for (let registration of registrations) {
+                            registration.unregister()
+                        }
+                    });
+                    console.log("ServiceWorkers Unregistered");
+                },
+
+                reloadPage() {
+                    window.location.reload();
                 },
 
                 performSearch: function () {
